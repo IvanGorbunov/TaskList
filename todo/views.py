@@ -1,3 +1,11 @@
 from django.shortcuts import render
+from django.contrib.auth.forms import UserCreationForm
+from rest_framework.views import APIView
 
-# Create your views here.
+
+class Registration(APIView):
+    def get(self, request):
+        context = {
+            'form': UserCreationForm()
+        }
+        return render(request, 'todo/signupuser.html', context)
