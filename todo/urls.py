@@ -6,7 +6,7 @@ app_name = 'signupuser'
 urlpatterns = [
 
     # Auth
-    path('', Registration.as_view(), name='signupuser')
+    path('', Registration.as_view(), name='signupuser'),
 
     # Todos
 ]

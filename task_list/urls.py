@@ -20,7 +20,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
 
     # Auth
-    path('signup/', include('todo.urls'))
+    path('signup/', include('todo.urls')),
 
     # Todos
 ]
