@@ -1,6 +1,6 @@
 from django.db import IntegrityError
 from django.http import HttpResponse
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.contrib.auth.forms import UserCreationForm
 from rest_framework.views import APIView
 from django.contrib.auth.models import User
@@ -20,7 +20,7 @@ class Registration(APIView):
                 user = User.objects.create_user(request.POST['username'], password=request.POST['password1'])
                 user.save()
                 login(request, user)
-                return HttpResponse('Приняли! Спасибо за вашу регистрацию.')
+                return redirect('currenttasks')
             except IntegrityError:
                 context = {
                     'form': UserCreationForm(),
@@ -35,3 +35,8 @@ class Registration(APIView):
             }
             return render(request, 'todo/signupuser.html', context)
 
+
+class CurrentTasks(APIView):
+
+    def get(self, request):
+        return render(request, 'todo/current_tasks_list.html')
