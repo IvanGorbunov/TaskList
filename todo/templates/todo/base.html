@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    <div class="content">
+        <div class="registration">
+            {% if user.is_authenticated %}
+                <b>Выполнен вход как: <b>{{ user.username }}</b></p>
+<!--                <a href="{% url 'logoutuser' %}">Выход</a>-->
+                <form action="{% url 'logoutuser' %}" method="POST">
+                    {% csrf_token %}
+                    <button type="submit">Выход</button>
+                </form>
+            {% else %}
+                <a href="{% url 'signupuser' %}">Регистрация</a>
+                <a href="{% url 'loginuser' %}">Вход</a>
+            {% endif %}
+        </div>
+        {% block content %}{% endblock %}
+    </div>
+</body>
+</html>

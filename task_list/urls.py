@@ -16,15 +16,18 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 
-from todo.views import Registration, CurrentTasks
+from todo.views import Registration, CurrentTasks, LogoutUser, HomePage, LoginUser
 
 urlpatterns = [
     path('admin/', admin.site.urls),
 
     # Auth
     path('signup/', Registration.as_view(), name='signupuser'),
+    path('login/', LoginUser.as_view(), name='loginuser'),
+    path('logout/', LogoutUser.as_view(), name='logoutuser'),
 
     # Todos
+    path('', HomePage.as_view(), name='home'),
     path('current/', CurrentTasks.as_view(), name='currenttasks'),
 
 ]
