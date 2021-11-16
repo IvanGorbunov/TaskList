@@ -16,18 +16,17 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 
-from todo.views import Registration, CurrentTasks, LogoutUser, HomePage, LoginUser
+from todo import views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
 
     # Auth
-    path('signup/', Registration.as_view(), name='signupuser'),
-    path('login/', LoginUser.as_view(), name='loginuser'),
-    path('logout/', LogoutUser.as_view(), name='logoutuser'),
+    path('signup/', views.Registration.as_view(), name='signupuser'),
+    path('login/', views.LoginUser.as_view(), name='loginuser'),
+    path('logout/', views.LogoutUser.as_view(), name='logoutuser'),
 
     # Todos
-    path('', HomePage.as_view(), name='home'),
-    path('current/', CurrentTasks.as_view(), name='currenttasks'),
-
+    path('', views.HomePage.as_view(), name='home'),
+    path('tasks/', include('todo.urls')),
 ]

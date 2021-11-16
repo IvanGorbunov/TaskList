@@ -1,12 +1,15 @@
 from django.urls import path
 
-from .views import Registration
+from . import views
 
-# app_name = 'signupuser'
-# urlpatterns = [
-#
-#     # Auth
-#     path('', Registration.as_view(), name='signupuser'),
-#
-#     # Todos
-# ]
+app_name = 'todo'
+urlpatterns = [
+
+    # Auth
+    # path('', Registration.as_view(), name='currenttasks'),
+
+    # Todos
+    path('', views.ListTasks.as_view(), name='list_tasks'),
+    path('<int:pk>/', views.TaskDetail.as_view(), name='task'),
+
+]
