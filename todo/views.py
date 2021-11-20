@@ -7,6 +7,8 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from django.contrib.auth.models import User
 from django.contrib.auth import login, logout, authenticate
+from rest_framework.viewsets import ViewSetMixin
+
 from .forms import TaskForm
 
 from todo.models import Tasks
@@ -90,12 +92,35 @@ class ListTasks(APIView):
     Список всех задач
     """
     def get(self, request):
-        tasks = Tasks.objects.all()
+        tasks = Tasks.objects.filter(user=request.user, date_completed__isnull=True).all()
         serializer = TaskSerializer(tasks, many=True)
         context = {
             'tasks': serializer.data
         }
         return render(request, 'todo/current_tasks_list.html', context)
+
+
+class NewTask(APIView):
+    """
+    Новая задача
+    """
+    def get(self, request):
+        serializer = TaskSerializer()
+        context = {
+            'user': request.user,
+            'form': TaskForm(serializer.data),
+        }
+        return render(request, 'todo/create_task.html', context)
+
+    def post(self, request, *args, **kwargs):
+        serializer = TaskSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            context = {
+                'form': TaskForm(serializer.data),
+            }
+            return render(request, 'todo/create_task.html', context)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 class TaskDetail(APIView):
@@ -113,7 +138,7 @@ class TaskDetail(APIView):
             'user': request.user,
             'form': TaskForm(serializer.data),
         }
-        return render(request, 'todo/create_task.html', context)
+        return render(request, 'todo/edit_task.html', context)
 
     def post(self, request, *args, **kwargs):
         task = self.get_object(kwargs['pk'])
@@ -123,7 +148,7 @@ class TaskDetail(APIView):
             context = {
                 'form': TaskForm(serializer.data),
             }
-            return render(request, 'todo/create_task.html', context)
+            return render(request, 'todo/edit_task.html', context)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     def put(self, request, pk, format=None):

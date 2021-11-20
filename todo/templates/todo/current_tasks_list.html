@@ -3,4 +3,16 @@
 {% block content %}
 <h1>Current tasks list</h1>
 
+<ul>
+    {% for task in tasks %}
+    <li><a href="">
+        {% if task.important %}<b>{% endif %}
+        {{ task.title }}
+        {% if task.important %}</b>{% endif %}
+        </a>
+        {% if task.description %} - {{ task.description }} {% endif %}
+    </li>
+    {% endfor %}
+</ul>
+
 {% endblock %}
