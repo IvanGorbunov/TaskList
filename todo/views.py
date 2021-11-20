@@ -127,14 +127,14 @@ class NewTask(APIView):
 
 class TaskDetail(APIView):
 
-    def get_object(self, pk):
+    def get_object(self, pk, user):
         try:
-            return Tasks.objects.get(pk=pk)
+            return Tasks.objects.get(pk=pk, user=user)
         except Tasks.DoesNotExist:
             return None
 
     def get(self, request, pk, format=None):
-        task = self.get_object(pk)
+        task = self.get_object(pk, user=request.user)
         if task is None:
             return HttpResponse('Not found: 404')
         serializer = TaskSerializer(task)
