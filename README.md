@@ -44,3 +44,9 @@
     ```bash
     python3 manage.py collectstatic
     ```
+
+1. Запуск проекта:
+
+    ```bash
+    python3 manage.py runserver
+    ```
