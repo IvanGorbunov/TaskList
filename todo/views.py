@@ -91,6 +91,7 @@ class ListTasks(APIView):
     """
     Список всех задач
     """
+
     def get(self, request):
         tasks = Tasks.objects.filter(user=request.user, date_completed__isnull=True).all()
         serializer = TaskSerializer(tasks, many=True)
@@ -104,6 +105,7 @@ class NewTask(APIView):
     """
     Новая задача
     """
+
     def get(self, request):
         serializer = TaskSerializer()
         context = {
@@ -129,10 +131,12 @@ class TaskDetail(APIView):
         try:
             return Tasks.objects.get(pk=pk)
         except Tasks.DoesNotExist:
-            raise Http404
+            return None
 
     def get(self, request, pk, format=None):
         task = self.get_object(pk)
+        if task is None:
+            return HttpResponse('Not found: 404')
         serializer = TaskSerializer(task)
         context = {
             'user': request.user,
@@ -163,4 +167,3 @@ class TaskDetail(APIView):
         task = self.get_object(pk)
         task.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
-
