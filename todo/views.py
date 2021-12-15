@@ -18,7 +18,7 @@ from .serializers import TaskSerializer
 class HomePage(APIView):
 
     def get(self, request):
-        return render(request, 'todo/home.html')
+        return render(request, 'todo/home.html', status=status.HTTP_200_OK)
 
 
 class Registration(APIView):
@@ -34,7 +34,7 @@ class Registration(APIView):
                 user = User.objects.create_user(request.POST['username'], password=request.POST['password1'])
                 user.save()
                 login(request, user)
-                return redirect('currenttasks')
+                return redirect('home')
             except IntegrityError:
                 context = {
                     'form': UserCreationForm(),
@@ -56,35 +56,36 @@ class LoginUser(APIView):
         context = {
             'form': AuthenticationForm()
         }
-        return render(request, 'todo/loginuser.html', context)
+        return render(request, 'todo/loginuser.html', context, status=status.HTTP_200_OK)
 
     def post(self, request):
         user = authenticate(request, username=request.POST['username'], password=request.POST['password'])
-        if user is None:
+        if not user:
             context = {
                 'form': AuthenticationForm(),
                 'error': 'Логин или пароль не совпадают.'
             }
-            return render(request, 'todo/loginuser.html', context)
+            return render(request, 'todo/loginuser.html', context, status=status.HTTP_401_UNAUTHORIZED)
         else:
             try:
                 login(request, user)
-                return redirect('currenttasks')
+                return redirect('home')
             except IntegrityError:
                 context = {
                     'error': 'Это имя пользователя уже используется.'
                 }
-                return render(request, 'todo/loginuser.html', context)
+                return render(request, 'todo/loginuser.html', context, status=status.HTTP_200_OK)
 
 
 class LogoutUser(APIView):
 
     def get(self, request):
-        pass
+        logout(request)
+        return redirect('loginuser')
 
     def post(self, request):
         logout(request)
-        return redirect('home')
+        return redirect('loginuser')
 
 
 class ListTasks(APIView):

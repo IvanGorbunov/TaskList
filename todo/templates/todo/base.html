@@ -1,25 +1,89 @@
+{% load static %}
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>Title</title>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+
+    <link rel="stylesheet" href="{% static 'lesson_topics/css/style.css' %}">
+    <script src="{% static 'todo/js/script.js' %}"></script>
+
+    <title>{% block title %}{% endblock %}</title>
 </head>
 <body>
-    <div class="content">
-        <div class="registration">
-            {% if user.is_authenticated %}
-                <b>Выполнен вход как: <b>{{ user.username }}</b></p>
-<!--                <a href="{% url 'logoutuser' %}">Выход</a>-->
-                <form action="{% url 'logoutuser' %}" method="POST">
-                    {% csrf_token %}
-                    <button type="submit">Выход</button>
+<!--  Шапка сайта  -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top">
+        <div class="container-fluid">
+            <a href="#" class="navbar-brand">
+                <img src="{% static 'todo/img/TD_logo.png' %}" width="100" height="60" alt="Мои задачи">
+            </a>
+            <a href="#" class="navbar-brand">
+                <img src="https://nuxtjs.org/logos/nuxt-square-white.svg" width="30" height="30" alt="Мои задачи">
+            </a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse"
+                    data-target="#navbarSupportedContent"
+                    aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+
+                <!--     главное меню       -->
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li class="nav-item active">
+                        <a href="{% url 'home' %}" class="nav-link">Главная</a>
+                    </li>
+                    <li class="nav-item active">
+                        <a href="{% url 'todo:tasks_list' %}" class="nav-link">Задачи</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="{% url 'news:news_list' %}" class="nav-link">Новости</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="{% url 'contacts:contacts_list' %}" class="nav-link">Контакты</a>
+                    </li>
+                </ul>
+
+                <!--     поле для поиска       -->
+                <form class="d-flex my-2 my-lg-0">
+                    <input class="form-control me-2" type="search" placeholder="Поиск" aria-label="Поиск">
+                    <button class="btn btn-outline-success me-2" type="submit">Поиск</button>
                 </form>
-            {% else %}
-                <a href="{% url 'signupuser' %}">Регистрация</a>
-                <a href="{% url 'loginuser' %}">Вход</a>
-            {% endif %}
+
+                <!--     кнопка регистрации, авторизации и выхода       -->
+                {% if user.is_authenticated %}
+                    <div class="light me-2">
+                        <b>Выполнен вход как: {{ user.username }}</b>
+                    </div>
+                    {% csrf_token %}
+                    <a href="{% url 'logoutuser' %}" class="btn btn-outline-light mr-2">{{ user.username }}: Выход</a>
+                {% else %}
+                    <a href="{% url 'loginuser' %}" class="btn btn-outline-light me-2">Вход</a>
+                    <a href="{% url 'signupuser' %}" class="btn btn-outline-light me-2">Регистрация</a>
+                {% endif %}
+
+            </div>
         </div>
-        {% block content %}{% endblock %}
+    </nav>
+
+    {% block header %}{% endblock %}
+
+    <div class="content">
+         {% block content %}{% endblock %}
     </div>
+
+    {% block pagination %}{% endblock %}
+
+    {% include './block/footer.html' %}
+
+
+    <!-- Option 1: Bootstrap Bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
+
 </body>
 </html>
