@@ -29,4 +29,7 @@ urlpatterns = [
     # Todos
     path('', views.HomePage.as_view(), name='home'),
     path('tasks/', include('todo.urls')),
+    path('contacts/', include('contacts.urls')),
+    path('news/', include('news.urls')),
+    path('bug_reports/', include('bug_reports.urls')),
 ]

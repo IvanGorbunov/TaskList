@@ -36,10 +36,13 @@
                 <!--     главное меню       -->
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                     <li class="nav-item active">
-                        <a href="{% url 'todo:list_tasks' %}" class="nav-link">Главная</a>
+                        <a href="{% url 'todo:tasks_list' %}" class="nav-link">Главная</a>
                     </li>
                     <li class="nav-item">
-                        <a href="{% url 'contacts:contact_list' %}" class="nav-link">Контакты</a>
+                        <a href="{% url 'news:news_list' %}" class="nav-link">Новости</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="{% url 'contacts:contacts_list' %}" class="nav-link">Контакты</a>
                     </li>
                 </ul>
 
