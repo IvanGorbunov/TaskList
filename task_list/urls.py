@@ -14,7 +14,9 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
+from django.contrib.auth.decorators import login_required
 from django.urls import path, include
+
 
 from todo import views
 
@@ -27,7 +29,7 @@ urlpatterns = [
     path('logout/', views.LogoutUser.as_view(), name='logoutuser'),
 
     # Todos
-    path('', views.HomePage.as_view(), name='home'),
+    path('', login_required(views.HomePage.as_view()), name='home'),
     path('tasks/', include('todo.urls')),
     path('contacts/', include('contacts.urls')),
     path('news/', include('news.urls')),
