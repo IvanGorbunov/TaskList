@@ -1,4 +1,6 @@
 # Список задач
+![GitHub release (latest SemVer including pre-releases)](https://img.shields.io/github/v/release/IvanGorbunov/TaskList?include_prereleases)
+[![Build Status](https://app.travis-ci.com/IvanGorbunov/TaskList.svg?branch=master)](https://app.travis-ci.com/IvanGorbunov/TaskList)
 
 ## Запуск
 
@@ -34,7 +36,7 @@
     ```python
     DEBUG=False
     SECRET_KEY=<_любая_последовательность_символов_>
-    DATABASE_NAME=db.sqlite3
+    DATABASE_URL=sqlite:///db.sqlite3
 
     ALLOWED_HOSTS=<_url_сайта_>
     ```
