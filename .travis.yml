@@ -5,7 +5,7 @@ python:
   - 3.9
 
 env:
-  - SECRET_KEY='TEST' ALLOWED_HOSTS=* DATABASE_NAME=db.sqlite3
+  - SECRET_KEY='TEST' ALLOWED_HOSTS=* DATABASE_URL=sqlite:///db.sqlite3
 
 services:
   - mysql
