@@ -15,5 +15,7 @@ __pycache__
 /static/
 /media/
 
-/blog/migrations/
-/portfolio/migrations/
+/bug_reports/migrations/
+/contacts/migrations/
+/news/migrations/
+/todo/migrations/
