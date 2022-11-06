@@ -1,7 +1,9 @@
 from django.db import IntegrityError
-from django.http import HttpResponse, Http404
+from django.forms import model_to_dict
+from django.http import HttpResponse, Http404, JsonResponse
 from django.shortcuts import render, redirect
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
+from django.views.generic import View
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -88,18 +90,34 @@ class LogoutUser(APIView):
         return redirect('loginuser')
 
 
-class ListTasks(APIView):
+class TaskList(View):
     """
     Список всех задач
     """
 
     def get(self, request):
-        tasks = Tasks.objects.filter(user=request.user, date_completed__isnull=True).all()
+        form = TaskForm()
+        tasks = Tasks.objects.filter(user=request.user).all()
         serializer = TaskSerializer(tasks, many=True)
         context = {
+            'form': form,
             'tasks': serializer.data
         }
-        return render(request, 'todo/current_tasks_list.html', context)
+        return render(request, 'todo/task_list.html', context)
+
+    def post(self, request):
+        form = TaskForm(request.POST)
+
+        if form.is_valid():
+            new_task = form.save()
+            return JsonResponse(
+                {
+                    'task': model_to_dict(new_task),
+                },
+                status=200
+            )
+        else:
+            return redirect('todo:tasks_list')
 
 
 class NewTask(APIView):
@@ -168,3 +186,30 @@ class TaskDetail(APIView):
         task = self.get_object(pk)
         task.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
+
+
+class TaskComplete(View):
+
+    def post(self, request, pk):
+        task = Tasks.objects.get(id=pk)
+        task.completed = True
+        task.save()
+        return JsonResponse(
+            {
+                'task': model_to_dict(task)
+            },
+            status=200
+        )
+
+
+class TaskDelete(View):
+
+    def post(self, request, pk):
+        task = Tasks.objects.get(id=pk)
+        task.delete()
+        return JsonResponse(
+            {
+                'result': 'ok',
+            },
+            status=200
+        )
