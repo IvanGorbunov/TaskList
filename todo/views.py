@@ -1,5 +1,6 @@
 from django.db import IntegrityError
-from django.http import HttpResponse, Http404
+from django.forms import model_to_dict
+from django.http import HttpResponse, Http404, JsonResponse
 from django.shortcuts import render, redirect
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.views.generic import View
@@ -89,7 +90,7 @@ class LogoutUser(APIView):
         return redirect('loginuser')
 
 
-class ListTasks(View):
+class TaskList(View):
     """
     Список всех задач
     """
@@ -109,7 +110,12 @@ class ListTasks(View):
 
         if form.is_valid():
             new_task = form.save()
-            return redirect('todo:tasks_list')
+            return JsonResponse(
+                {
+                    'task': model_to_dict(new_task),
+                },
+                status=200
+            )
         else:
             return redirect('todo:tasks_list')
 
@@ -180,3 +186,17 @@ class TaskDetail(APIView):
         task = self.get_object(pk)
         task.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
+
+
+class TaskComplete(View):
+
+    def post(self, request, pk):
+        task = Tasks.objects.get(id=pk)
+        task.completed = True
+        task.save()
+        return JsonResponse(
+            {
+                'task': model_to_dict(task)
+            },
+            status=200
+        )

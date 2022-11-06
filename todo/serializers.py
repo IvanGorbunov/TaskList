@@ -5,7 +5,7 @@ from todo.models import Tasks
 class TaskSerializer(serializers.ModelSerializer):
     class Meta:
         model = Tasks
-        fields = ('id', 'user', 'title', 'description', 'created', 'date_completed', 'important')
+        fields = '__all__'
 
     def create(self, validated_data):
         """
