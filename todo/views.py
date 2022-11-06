@@ -200,3 +200,16 @@ class TaskComplete(View):
             },
             status=200
         )
+
+
+class TaskDelete(View):
+
+    def post(self, request, pk):
+        task = Tasks.objects.get(id=pk)
+        task.delete()
+        return JsonResponse(
+            {
+                'result': 'ok',
+            },
+            status=200
+        )
